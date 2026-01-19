@@ -14,22 +14,12 @@ spec:
     spec:
       containers:
         - name: backend
-          image: abhipraydh96/b31-backend:latest
+          image: abhipraydh96/flight-backend:latest
           ports:
             - containerPort: 8080
 
-          env:
-            - name: SPRING_DATASOURCE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: backend-secret
-                  key: spring.datasource.password
-
-          volumeMounts:
-            - name: config-volume
-              mountPath: /config
-
-      volumes:
-        - name: config-volume
-          configMap:
-            name: backend-config
+          envFrom:
+            - configMapRef:
+                name: backend-config
+            - secretRef:
+                name: backend-secret
