@@ -3,9 +3,10 @@ kind: ConfigMap
 metadata:
   name: backend-config
 data:
-  DATASOURCE_URL: jdbc:mysql://13.219.75.105:3306/flightdb?createDatabaseIfNotExist=true
-  DATASOURCE_USER: linux
+  DATASOURCE_URL: jdbc:mysql://13.219.75.105:3306/student_db?createDatabaseIfNotExist=true
+  DATASOURCE_USER: admin
   FRONTEND_URL: http://localhost:5173
+
 
 
 
