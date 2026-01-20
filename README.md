@@ -6,7 +6,7 @@
 
 **Clone Repository**
 ````
-https://github.com/abhipraydhoble/student-registration.git
+git clone https://github.com/abhipraydhoble/student-registration.git
 ````
 ````
 cd student-registration/infra
