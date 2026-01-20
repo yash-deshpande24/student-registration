@@ -9,9 +9,7 @@ module "eks" {
     desired_nodes = 1
     max_nodes  = 1
     min_nodes  = 1
-    node_instance_type = "t3.medium"
+    node_instance_type = "m7i-flex.large"
 }
 
-<!---module "s3" {
-    source = "./modules/s3"
-}-->
+
