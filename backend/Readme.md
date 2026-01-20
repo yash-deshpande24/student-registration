@@ -186,27 +186,27 @@ pipeline {
     tools {
         jdk 'jdk17'
         maven 'maven'
+        dockerTool 'docker'
     }
 
     environment {
         DOCKER_IMAGE = "abhipraydh96/std-test-be"
         IMAGE_TAG    = "${BUILD_NUMBER}"
-        KUBE_NAMESPACE = "default"
     }
 
     stages {
 
-        stage('Checkout Code') {
+        stage('Code-Pull') {
             steps {
                 git branch: 'main',
                     url: 'https://github.com/abhipraydhoble/project-studentapp-three-tier-final.git'
             }
         }
 
-        stage('Build Backend') {
+        stage('Build') {
             steps {
                 dir('backend') {
-                    sh 'mvn clean verify -DskipTests'
+                    sh 'mvn clean package -DskipTests'
                 }
             }
         }
@@ -214,11 +214,14 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 dir('backend') {
-                    withSonarQubeEnv('sonarqube') {
-                        sh """
-                            mvn sonar:sonar \
-                              -Dsonar.projectKey=student-backend
-                        """
+                    withSonarQubeEnv('sonar-server') {
+                        sh '''
+                          sonar-scanner \
+                          -Dsonar.projectName=student-backend \
+                          -Dsonar.projectKey=student-backend \
+                          -Dsonar.sources=src/main/java \
+                          -Dsonar.java.binaries=target
+                        '''
                     }
                 }
             }
@@ -232,54 +235,54 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Docker-Build') {
             steps {
                 dir('backend') {
-                    sh "docker build -t ${DOCKER_IMAGE}:${IMAGE_TAG} ."
-                }
-            }
-        }
-
-        stage('Push Docker Image') {
-            steps {
-                withCredentials([
-                    usernamePassword(
-                        credentialsId: 'dockerhub-cred',
-                        usernameVariable: 'DOCKER_USER',
-                        passwordVariable: 'DOCKER_PASS'
-                    )
-                ]) {
                     sh """
-                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                        docker push ${DOCKER_IMAGE}:${IMAGE_TAG}
+                      docker build -t ${DOCKER_IMAGE}:${IMAGE_TAG} .
                     """
                 }
             }
         }
 
-        stage('Deploy to EKS') {
+        stage('Docker-Push') {
+            steps {
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'docker-cred',
+                        usernameVariable: 'DOCKER_USER',
+                        passwordVariable: 'DOCKER_PASS'
+                    )
+                ]) {
+                    sh """
+                      echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                      docker push ${DOCKER_IMAGE}:${IMAGE_TAG}
+                    """
+                }
+            }
+        }
+
+        stage('Deploy') {
             steps {
                 withCredentials([
                     file(credentialsId: 'config-file', variable: 'KUBECONFIG'),
                     [$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-cred']
                 ]) {
                     sh """
-                        sed -i 's|image: .*|image: ${DOCKER_IMAGE}:${IMAGE_TAG}|' backend/deployment.yaml
+                        sed -i 's|image:.*|image: ${DOCKER_IMAGE}:${IMAGE_TAG}|' backend/deployment.yaml
 
-                     
-                        kubectl apply -n ${KUBE_NAMESPACE} -f backend/secret.yaml
-                        kubectl apply -n ${KUBE_NAMESPACE} -f backend/deployment.yaml
-                        kubectl apply -n ${KUBE_NAMESPACE} -f backend/service.yaml
-
-                     
+                        kubectl apply -f backend/secret.yaml
+                        kubectl apply -f backend/deployment.yaml
+                        kubectl apply -f backend/service.yaml
                     """
                 }
             }
         }
     }
-
 }
+
 ````
+
 
 
 
