@@ -4,9 +4,7 @@
 - instance type should be medium or large
 - 30 gb disk
 ---
-**create iam role**
-  - give admin acess
-  - and attach to ec2 instance
+
 ---
 **Clone Repository**
 ````
@@ -28,12 +26,6 @@ sudo apt update && sudo apt install terraform -y
 #### Changes:
 - **main.tf** instance-type
 - **provider.tf** add provider details 
-
-**Initialize terraform**
-````
-terraform init
-````
----
 **AWS CLI Installation:**
 
 ````
@@ -45,6 +37,17 @@ sudo ./aws/install
 ````
 aws --version
 ````
+**create aws profile**
+````
+aws configure --profile "tf-user"
+````
+---
+**Initialize terraform**
+````
+terraform init
+````
+---
+
 **Cluster Login**
 - first login into aws
 ````
