@@ -7,6 +7,7 @@
 **create iam role**
   - give admin acess
   - and attach to ec2 instance
+---
 **Clone Repository**
 ````
 git clone https://github.com/abhipraydhoble/student-registration.git
