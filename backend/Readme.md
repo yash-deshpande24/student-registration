@@ -199,7 +199,7 @@ pipeline {
         stage('Code-Pull') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/abhipraydhoble/project-studentapp-three-tier-final.git'
+                    url: 'https://github.com/abhipraydhoble/student-registration.git'
             }
         }
 
@@ -282,6 +282,7 @@ pipeline {
 }
 
 ````
+
 
 
 
