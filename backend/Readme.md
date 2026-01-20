@@ -24,18 +24,9 @@ sudo chmod 777 /var/run/docker.sock
 ````
 docker run -d --name sonar -p 9000:9000 sonarqube:lts-community
 ````
-## Step3: Connect to Jenkins 
+##  Connect to Jenkins 
 
-## Step4: Connect to SonarQube
-   - Admin->my account->security->generate token
-![image](https://github.com/user-attachments/assets/26cb309d-aa3c-4a74-873f-9e87b2fcce00)
-
-Step5: In Jenkins
-     - Manage Jenkins: Credentials
-       - Sonar-Token
-       - Git-Cred
-       - Docker-Cred
-## Step6: Install Required Plugins:
+## Install Required Plugins:
    **Install below plugins**
 
 ````
@@ -53,8 +44,7 @@ docker
 ````
 stage view
 ````
-
-## Step7: Install  Tools: Manage Jenkins->Tools
+## Install  Tools: Manage Jenkins->Tools
    - add jdk: "jdk17" ->install from adoptium.net->version- 17
    - add SonarQube Scanner: "sonar-scanner"
    - add NodeJs: "node18" -> version 18.15.1
@@ -71,15 +61,17 @@ Goto Manage Jenkins → Tools → Install JDK(17) and NodeJs(16)→ Click on App
 ![image](https://github.com/user-attachments/assets/51617874-be4d-438c-a93e-5a5d9e5781fa)
 #### Docker
 ![image](https://github.com/user-attachments/assets/289c2e2a-df33-476b-a195-d584db3ef03e)
+##  Connect to SonarQube
+   - Admin->my account->security->generate token
+![image](https://github.com/user-attachments/assets/26cb309d-aa3c-4a74-873f-9e87b2fcce00)
 
 
-
-## Step8: Log in to Sonarqube and generate token
+##  Log in to Sonarqube and generate token
  - username: admin
  - password: admin
 <img width="1902" height="957" alt="image" src="https://github.com/user-attachments/assets/36620768-5f81-440c-b31b-ecf29c609f64" />   
 
-## Step9: Add DockerHub & Sonarqube Credentials:
+##  Add DockerHub & Sonarqube Credentials:
    **Docker**
   - Go to  "Manage Jenkins" → Credentials."
   - Click on "Global."
@@ -98,16 +90,16 @@ Goto Manage Jenkins → Tools → Install JDK(17) and NodeJs(16)→ Click on App
 
 <img width="1907" height="846" alt="image" src="https://github.com/user-attachments/assets/bcd447f5-4a49-478d-99d6-1379202f4334" />
 
-## Step10: Configure Sonar Server: Manage Jenkins->System
+##  Configure Sonar Server: Manage Jenkins->System
    - name: "sonar-server"
    - url:
    - token:
 ![image](https://github.com/user-attachments/assets/c5d05628-1502-4a92-b722-7ad3eed5d587)
 
-## Step 11: Configure sonarqube webhook
+## Configure sonarqube webhook
   - go to sonarqube-->administration--->configuration-->webhook
 
-## Step12: Create Pipeline
+##  Create Pipeline
 
 ```jenkinsfile
 pipeline {
@@ -292,4 +284,5 @@ pipeline {
 
 }
 ````
+
 
