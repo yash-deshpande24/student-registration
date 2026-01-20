@@ -15,6 +15,6 @@ module "eks" {
     node_instance_type = "t3.medium"
 }
 
-module "s3" {
+<!---module "s3" {
     source = "./modules/s3"
-}
+}-->
